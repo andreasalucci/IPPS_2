@@ -1,8 +1,8 @@
 "use client";
 
 import type { NextPage } from "next";
-import { useAccount, usePublicClient } from "wagmi"; // Importa gli hook wagmi
-import { ethers } from "ethers"; // Importa ethers.js
+import { useAccount, usePublicClient } from "wagmi";
+import { ethers } from "ethers";
 import Pyramid from "~~/components/Pyramid";
 import "../components/PyramidLoader.css";
 import background from "~~/components/assets/Background.png";
@@ -10,9 +10,9 @@ import React, { useState } from "react";
 
 
 const Home: NextPage = () => {
-  const { address: connectedAddress } = useAccount(); // Ottieni l'indirizzo del wallet connesso
-  const publicClient = usePublicClient(); // Ottieni il provider pubblico
-  const recipientAddress = "0xdb154273036613c5ace12fae6e4291aa6ea993ba"; // Indirizzo destinatario fisso
+  const { address: connectedAddress } = useAccount();
+  const publicClient = usePublicClient(); // provider pubblico
+  const recipientAddress = "0xdb154273036613c5ace12fae6e4291aa6ea993ba"; // Recipiente (Pool)
   /*const [showPyramid, setShowPyramid] = useState(false);*/
   let showPyramid = true;
 
@@ -49,7 +49,7 @@ const Home: NextPage = () => {
         height: "100vh",
         width: "100vw",
       }}
-      className="flex items-center justify-center" // Centra orizzontalmente e verticalmente
+      className="flex items-center justify-center" // Centra
     >
       <div className="flex flex-col items-center justify-center text-center">
         <h1>
