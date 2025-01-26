@@ -1,0 +1,78 @@
+"use client";
+
+import type { NextPage } from "next";
+import { useAccount, usePublicClient } from "wagmi"; // Importa gli hook wagmi
+import { ethers } from "ethers"; // Importa ethers.js
+import Pyramid from "~~/components/Pyramid";
+import "../components/PyramidLoader.css";
+import background from "~~/components/assets/Background.png";
+
+const alreadyInvested = false;
+
+const Home: NextPage = () => {
+  const { address: connectedAddress } = useAccount(); // Ottieni l'indirizzo del wallet connesso
+  const publicClient = usePublicClient(); // Ottieni il provider pubblico
+  const recipientAddress = "0xdb154273036613c5ace12fae6e4291aa6ea993ba"; // Indirizzo destinatario fisso
+
+  const handlePayment = async () => {
+    if (!publicClient) {
+      alert("Wallet not connected. Please connect your wallet first!");
+      return;
+    }
+
+    try {
+      const provider = new ethers.providers.Web3Provider(publicClient);
+      const signer = provider.getSigner();
+
+      const tx = await signer.sendTransaction({
+        to: recipientAddress,
+        value: ethers.utils.parseEther("1.0"),
+      });
+
+      console.log("Transaction sent:", tx);
+      alert(`Transaction sent! Hash: ${tx.hash}`);
+    } catch (error) {
+      console.error("Transaction failed:", error);
+      alert("Payment failed! Check the console for details.");
+    }
+  };
+
+  return (
+    <div
+      style={{
+        backgroundImage: `url(${background.src})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        height: "100vh",
+        width: "100vw",
+      }}
+      className="flex items-center justify-center" // Centra orizzontalmente e verticalmente
+    >
+      <div className="flex flex-col items-center justify-center text-center">
+        <h1>
+          <span className="text-6xl font-bold text-blue-500 animate-pulse">
+            Interplanetary Pension System
+          </span>
+        </h1>
+        <div className="mt-10">
+          {!alreadyInvested && (
+            <button
+              onClick={handlePayment}
+              className="bg-primary text-white py-2 px-4 rounded-lg shadow-md hover:bg-primary-focus transition-all"
+            >
+              Invest 1 ETH
+            </button>
+          )}
+          {alreadyInvested && (
+            <div className="flex justify-center items-center mt-10">
+              <Pyramid value={75} />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Home;
